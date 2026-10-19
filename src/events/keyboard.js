@@ -108,15 +108,21 @@ function keyboard(p5, fn, lifecycles) {
   fn.keyIsPressed = false;
 
   /**
-   * A `String` system variable that contains the value of the last key typed.
+   * A `String` system variable that contains the value of the most recently
+   * pressed key.
    *
-   * The key variable is helpful for checking whether an
-   * <a href="https://en.wikipedia.org/wiki/ASCII#Printable_characters" target="_blank">ASCII</a>
-   * key has been typed. For example, the expression `key === "a"` evaluates to
-   * `true` if the `a` key was typed and `false` if not. `key` doesn’t update
-   * for special keys such as `LEFT_ARROW` and `ENTER`. Use keyCode instead for
-   * special keys. The <a href="#/p5/keyIsDown">keyIsDown()</a> function should
-   * be used to check for multiple different key presses at the same time.
+   * In p5.js 2.x, `key` updates for all keys, including characters such as
+   * `"a"` as well as special keys such as `LEFT_ARROW` and `ENTER`. When all
+   * keys are released, `key` is reset to an empty string `""` (unlike in p5.js
+   * 1.x, which retained the value of the last pressed key).
+   *
+   * For checking whether a key is currently pressed in continuous loops (such
+   * as `draw()`), using the <a href="#/p5/keyIsDown">keyIsDown()</a> function is
+   * recommended instead of comparing `key === ...`, as it is more robust and
+   * backwards-compatible.
+   *
+   * For an overview of changes between p5.js 1.x and 2.x regarding `key`,
+   * `code`, and `keyCode`, see the <a href="https://p5js.org/reference/p5/code/">code reference page</a>.
    *
    * @property {String} key
    * @readOnly
@@ -160,17 +166,15 @@ function keyboard(p5, fn, lifecycles) {
    * }
    *
    * function draw() {
-   *   // Update x and y if a key is pressed.
-   *   if (keyIsPressed === true) {
-   *     if (key === 'w') {
-   *       y -= 1;
-   *     } else if (key === 's') {
-   *       y += 1;
-   *     } else if (key === 'a') {
-   *       x -= 1;
-   *     } else if (key === 'd') {
-   *       x += 1;
-   *     }
+   *   // Update x and y using keyIsDown().
+   *   if (keyIsDown('w')) {
+   *     y -= 1;
+   *   } else if (keyIsDown('s')) {
+   *     y += 1;
+   *   } else if (keyIsDown('a')) {
+   *     x -= 1;
+   *   } else if (keyIsDown('d')) {
+   *     x += 1;
    *   }
    *
    *   // Style the circle.
