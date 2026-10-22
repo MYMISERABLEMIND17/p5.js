@@ -160,5 +160,67 @@ suite('Vertex', function () {
       assert.equal(primitives[1].vertexCount, 3);
       myp5.endShape();
     });
+
+    test('TRIANGLES ignores extra vertices when count is not a multiple of 3', function () {
+      myp5.createCanvas(50, 50);
+      myp5.beginShape(myp5.TRIANGLES);
+      myp5.vertex(10, 10);
+      myp5.vertex(20, 10);
+      myp5.vertex(20, 20);
+      myp5.vertex(30, 30); // 4th vertex - incomplete triangle ignored without error
+      myp5.endShape();
+
+      // Test with 1 vertex and 2 vertices (fewer than capacity 3)
+      myp5.beginShape(myp5.TRIANGLES);
+      myp5.vertex(10, 10);
+      myp5.endShape();
+
+      myp5.beginShape(myp5.TRIANGLES);
+      myp5.vertex(10, 10);
+      myp5.vertex(20, 10);
+      myp5.endShape();
+    });
+
+    test('LINES ignores trailing incomplete vertex when count is odd', function () {
+      myp5.createCanvas(50, 50);
+      myp5.beginShape(myp5.LINES);
+      myp5.vertex(10, 10);
+      myp5.vertex(20, 20);
+      myp5.vertex(30, 30); // 3rd vertex - incomplete line ignored without error
+      myp5.endShape();
+
+      myp5.beginShape(myp5.LINES);
+      myp5.vertex(10, 10); // 1 vertex - incomplete line ignored without error
+      myp5.endShape();
+    });
+
+    test('QUADS ignores trailing incomplete vertices when count is not a multiple of 4', function () {
+      myp5.createCanvas(50, 50);
+      myp5.beginShape(myp5.QUADS);
+      myp5.vertex(0, 0);
+      myp5.vertex(10, 0);
+      myp5.vertex(10, 10);
+      myp5.vertex(0, 10);
+      myp5.vertex(20, 20); // 5th vertex - incomplete quad ignored without error
+      myp5.endShape();
+
+      myp5.beginShape(myp5.QUADS);
+      myp5.vertex(0, 0);
+      myp5.vertex(10, 0);
+      myp5.vertex(10, 10); // 3 vertices - incomplete quad ignored without error
+      myp5.endShape();
+    });
+
+    test('WebGL mode safely handles non-multiple vertex counts for TRIANGLES', function () {
+      myp5.createCanvas(50, 50, myp5.WEBGL);
+      myp5.beginShape(myp5.TRIANGLES);
+      myp5.vertex(10, 10, 0);
+      myp5.vertex(20, 10, 0);
+      myp5.vertex(20, 20, 0);
+      myp5.vertex(30, 30, 0); // 4th vertex
+      myp5.endShape();
+    });
   });
 });
+
+

@@ -1358,12 +1358,14 @@ class PrimitiveToPath2DConverter extends PrimitiveVisitor {
     this.path.lineTo(x + Math.max(0.00001, Math.abs(x) * 1e-6), y);
   }
   visitLine(line) {
+    if (line.vertices.length < 2) return;
     const { x: x0, y: y0 } = line.vertices[0].position;
     const { x: x1, y: y1 } = line.vertices[1].position;
     this.path.moveTo(x0, y0);
     this.path.lineTo(x1, y1);
   }
   visitTriangle(triangle) {
+    if (triangle.vertices.length < 3) return;
     const [v0, v1, v2] = triangle.vertices;
     this.path.moveTo(v0.position.x, v0.position.y);
     this.path.lineTo(v1.position.x, v1.position.y);
@@ -1371,6 +1373,7 @@ class PrimitiveToPath2DConverter extends PrimitiveVisitor {
     this.path.closePath();
   }
   visitQuad(quad) {
+    if (quad.vertices.length < 4) return;
     const [v0, v1, v2, v3] = quad.vertices;
     this.path.moveTo(v0.position.x, v0.position.y);
     this.path.lineTo(v1.position.x, v1.position.y);
@@ -1645,12 +1648,15 @@ class PrimitiveToVerticesConverter extends PrimitiveVisitor {
     }
   }
   visitLine(line) {
+    if (line.vertices.length < 2) return;
     this.contours.push(line.vertices.slice());
   }
   visitTriangle(triangle) {
+    if (triangle.vertices.length < 3) return;
     this.contours.push(triangle.vertices.slice());
   }
   visitQuad(quad) {
+    if (quad.vertices.length < 4) return;
     this.contours.push(quad.vertices.slice());
   }
   visitTriangleFan(triangleFan) {

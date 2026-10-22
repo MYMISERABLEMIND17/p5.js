@@ -662,6 +662,7 @@ export function SVGExportAddon(p5, fn, lifecycles) {
 
     // Line primitive (renders straight line element)
     visitLine(line) {
+      if (line.vertices.length < 2) return;
       const { x: x0, y: y0 } = line.vertices[0].position;
       const { x: x1, y: y1 } = line.vertices[1].position;
       const lineEl = this._createElement('line', {
@@ -676,6 +677,7 @@ export function SVGExportAddon(p5, fn, lifecycles) {
 
     // Triangle primitive (renders 3-point polygon element)
     visitTriangle(triangle) {
+      if (triangle.vertices.length < 3) return;
       const [v0, v1, v2] = triangle.vertices;
       const points = `${v0.position.x},${v0.position.y} ${v1.position.x},${v1.position.y} ${v2.position.x},${v2.position.y}`;
       const triangleEl = this._createElement('polygon', { points });
@@ -685,6 +687,7 @@ export function SVGExportAddon(p5, fn, lifecycles) {
 
     // Quad primitive (renders 4-point polygon element)
     visitQuad(quad) {
+      if (quad.vertices.length < 4) return;
       const [v0, v1, v2, v3] = quad.vertices;
       const points = `${v0.position.x},${v0.position.y} ${v1.position.x},${v1.position.y} ${v2.position.x},${v2.position.y} ${v3.position.x},${v3.position.y}`;
       const quadEl = this._createElement('polygon', { points });
