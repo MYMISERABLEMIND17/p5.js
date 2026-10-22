@@ -1545,7 +1545,12 @@ function dom(p5, fn) {
 
     self.disable = function (shouldDisable = true) {
       for (const radioInput of self._getOptionsArray()) {
-        radioInput.setAttribute('disabled', shouldDisable);
+        radioInput.disabled = Boolean(shouldDisable);
+        if (shouldDisable) {
+          radioInput.setAttribute('disabled', 'true');
+        } else {
+          radioInput.removeAttribute('disabled');
+        }
       }
     };
 
